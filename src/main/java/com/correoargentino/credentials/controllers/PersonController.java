@@ -1,5 +1,7 @@
 package com.correoargentino.credentials.controllers;
 
+import com.correoargentino.credentials.exceptions.BadRequestException;
+import com.correoargentino.credentials.exceptions.SearchErrorException;
 import com.correoargentino.credentials.models.Person;
 import com.correoargentino.credentials.services.PersonService;
 import org.slf4j.Logger;
@@ -46,18 +48,23 @@ public class PersonController {
      */
     @PostMapping("/search")
     public String search(@RequestParam("document") Long document, Model model) {
+        try {
+            logger.info("DNI recibido: {}", document);
+            Optional<Person> person = personService.getPersonByDocument(document);
 
-        logger.info("DNI recibido: {}", document);
-
-        Optional<Person> person = personService.getPersonByDni(document);
-
-        if (person.isPresent()) {
-            model.addAttribute("person", person.get());
-            return "result";
-        } else {
-            return "not-found";
+            if (person.isPresent()) {
+                model.addAttribute("person", person.get());
+                return "result";
+            } else {
+                throw new SearchErrorException("Person not found with document: " + document);
+            }
+        } catch (Exception e) {
+            // Manejar la excepción
+            // Puedes mostrar un mensaje de error o redirigir a una página de error
+            return "error";
         }
     }
+
 
     /**
      * Maneja la solicitud GET para la ruta "/createPerson".
@@ -80,15 +87,21 @@ public class PersonController {
      */
     @PostMapping("/savePerson")
     public String savePerson(@RequestParam("document") Long document,
-                               @RequestParam("firstname") String firstname,
-                               @RequestParam("lastname") String lastname) {
-        Person newPerson = new Person();
-        newPerson.setDocument(document);
-        newPerson.setFirstName(firstname);
-        newPerson.setLastName(lastname);
+                             @RequestParam("firstname") String firstname,
+                             @RequestParam("lastname") String lastname) {
+        try {
+            Person newPerson = new Person();
+            newPerson.setDocument(document);
+            newPerson.setFirstName(firstname);
+            newPerson.setLastName(lastname);
 
-        personService.savePerson(newPerson);
-        return "index";
+            personService.savePerson(newPerson);
+            return "index";
+        } catch (Exception e) {
+            // Manejar la excepción
+            // Puedes mostrar un mensaje de error o redirigir a una página de error
+            return "error";
+        }
     }
 
     /**
@@ -99,7 +112,13 @@ public class PersonController {
      */
     @GetMapping("/persons")
     @ResponseBody
-    public List<Person> getAllEmployees() {
-        return personService.getAllPersons();
+    public List<Person> getAllPersons() {
+        try {
+            return personService.getAllPersons();
+        } catch (Exception e) {
+            // Manejar la excepción
+            // Lanzar la excepción personalizada
+            throw new BadRequestException("Error retrieving all persons: " + e.getMessage());
+        }
     }
 }

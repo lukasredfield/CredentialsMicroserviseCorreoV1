@@ -23,9 +23,10 @@ public class PersonService {
      * @param document El DNI de la persona a recuperar.
      * @return Un Optional que contiene al empleado si se encuentra, o un Optional vacío si no se encuentra.
      */
-    public Optional<Person> getPersonByDni(Long document) {
-        return personRepository.findById(document);
+    public Optional<Person> getPersonByDocument(Long document) {
+        return personRepository.findByDocument(document);
     }
+
 
     /**
      * Recupera una lista de todos los persona.

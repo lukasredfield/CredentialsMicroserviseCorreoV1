@@ -17,9 +17,9 @@
                 <div class="card-content white-text">
                     <span class="card-title center">CORREO ARGENTINO </span>
                     <form th:action="@{/search}" method="post" class="col s12">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <input id="document" type="text" class="validate" name="document" required>
+                        <div class="row" >
+                            <div class="input-field col s12" onsubmit="event.preventDefault()" >
+                                <input id="document" type="text" inputmode="numeric" class="validate" name="document" required oninput="justNumbers(event)" >
                                 <label for="document">Ingresa el DNI</label>
                             </div>
                         </div>
@@ -34,6 +34,12 @@
         </div>
     </div>
 </div>
+<script>
+    function justNumbers(event) {
+        const input = event.target;
+        input.value = input.value.replace(/\D/g, ''); // Filtra caracteres no numéricos
+    }
+</script>
 <!--JavaScript at end of body for optimized loading-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>

@@ -4,9 +4,7 @@ Aplicación para autenticar a los fiscales en las votaciones de Las Paso 2023
 
 ## Características
 
-- 
-- Característica 2
-- Característica 3
+-
 
 ## Requisitos
 

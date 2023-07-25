@@ -58,10 +58,12 @@ public class PersonController {
             } else {
                 throw new SearchErrorException("Person not found with document: " + document);
             }
+        } catch (SearchErrorException e) {
+            // Manejar la excepción específica de búsqueda no encontrada
+            return "not-found"; // Redirige a la página de empleado no encontrado
         } catch (Exception e) {
-            // Manejar la excepción
-            // Puedes mostrar un mensaje de error o redirigir a una página de error
-            return "error";
+            // Manejar otras excepciones generales
+            return "error"; // Redirige a la página de error general
         }
     }
 
